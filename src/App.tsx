@@ -4,8 +4,19 @@ import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 
 export type FilterValuesType = "all" | "active" | "completed";
+type TodolistsType ={
+    id: string
+    title:string
+    filter:FilterValuesType
+}
 
 function App() {
+    let [todolists, setTodolists] = useState<Array<TodolistsType>>(
+        [
+            {id: v1(), title: 'What to learn', filter: 'all'},
+            {id: v1(), title: 'What to buy', filter: 'all'},
+        ]
+    )
 
     let [tasks, setTasks] = useState([
         {id: v1(), title: "HTML&CSS", isDone: true},
@@ -14,6 +25,7 @@ function App() {
         {id: v1(), title: "Rest API", isDone: false},
         {id: v1(), title: "GraphQL", isDone: false},
     ]);
+
     let [filter, setFilter] = useState<FilterValuesType>("all");
 
 
@@ -54,14 +66,27 @@ function App() {
 
     return (
         <div className="App">
-            <Todolist title="What to learn"
-                      tasks={tasksForTodolist}
-                      removeTask={removeTask}
-                      changeFilter={changeFilter}
-                      addTask={addTask}
-                      changeTaskStatus={changeStatus}
-                      filter={filter}
-            />
+            {
+                todolists.map(todolist => {
+                    return <Todolist key={todolist.id}
+                                     title={todolist.title}
+                                     tasks={tasksForTodolist}
+                                     removeTask={removeTask}
+                                     changeFilter={changeFilter}
+                                     addTask={addTask}
+                                     changeTaskStatus={changeStatus}
+                                     filter={todolist.filter}
+                    />
+                })
+            }
+            {/*<Todolist title="What to learn"*/}
+            {/*          tasks={tasksForTodolist}*/}
+            {/*          removeTask={removeTask}*/}
+            {/*          changeFilter={changeFilter}*/}
+            {/*          addTask={addTask}*/}
+            {/*          changeTaskStatus={changeStatus}*/}
+            {/*          filter={filter}*/}
+            {/*/>*/}
         </div>
     );
 }
